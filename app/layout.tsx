@@ -9,8 +9,8 @@ const ibmPlexSerif = IBM_Plex_Serif({
   variable: "--font-ibm-plex-serif",
 });
 export const metadata: Metadata = {
-  title: "Horizon",
-  description: "A modern banking app for all.",
+  title: "Coinnect",
+  description: "Coinnect: A modern banking app for all.",
   icons: {
     icon: "/icons/logo.svg",
   },
