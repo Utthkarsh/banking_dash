@@ -1,7 +1,9 @@
 import React from 'react'
 import Link from 'next/link'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { BankTabItem } from './BankTabItem';
+import BankInfo from './BankInfo';
+import TransactionsTable from './TransactionsTable';
 const RecentTransactions = ({
     accounts,transactions = [],
     appwriteItemId,
@@ -19,14 +21,29 @@ const RecentTransactions = ({
         </Link>
       </header>
       <Tabs defaultValue={appwriteItemId} className="w-full">
-        <TabsList>
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="password">Password</TabsTrigger>
+        <TabsList className='recent-transactions-tablist'>
+          {accounts.map((account:Account) =>(
+            <TabsTrigger key={account.id} value={account.appwriteItemId} >
+              <BankTabItem key={account.id} account={account} appwriteItemId={appwriteItemId}></BankTabItem>
+            </TabsTrigger>
+          ))}
         </TabsList>
-        <TabsContent value="account">
-          Make changes to your account here.
-        </TabsContent>
-        <TabsContent value="password">Change your password here.</TabsContent>
+        {accounts.map((account:Account) =>(
+          <TabsContent
+          value={account.appwriteItemId}
+          key={account.id}
+          className='space-y-4'
+          >
+            <BankInfo 
+              account={account}
+              appwriteItemId={appwriteItemId}
+              type='full'
+            />
+            <TransactionsTable transactions={transactions}></TransactionsTable>
+
+
+          </TabsContent>
+        ))}
       </Tabs>
     </section>
   );
