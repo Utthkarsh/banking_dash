@@ -7,12 +7,13 @@ import Copy from './Copy'
 const BankCard = ({account,userName,showBalance=true}:CreditCardProps) => {
   return (
     <div className="flex flex-col">
-      <Link href={`/transaction-history/?id=${account.appwriteItemId}`} className="bank-card">
+      <Link
+        href={`/transaction-history/?id=${account.appwriteItemId}`}
+        className="bank-card"
+      >
         <div className="bank-card_content">
           <div>
-            <h1 className="text-16 font-semibold text-white">
-              {userName}
-            </h1>
+            <h1 className="text-16 font-semibold text-white">{userName}</h1>
             <p className="font-ibm-plex-serif font-black text-white">
               {formatAmount(account.currentBalance)}
             </p>
@@ -45,7 +46,8 @@ const BankCard = ({account,userName,showBalance=true}:CreditCardProps) => {
           className="absolute top-0 left-0"
         />
       </Link>
-      {showBalance && <Copy title={account?.sharableId}/>}
+      {showBalance && <Copy title={account?.sharableId} />}
+      
     </div>
   );
 }
