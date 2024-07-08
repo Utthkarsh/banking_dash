@@ -1,4 +1,5 @@
 import HeaderBox from '@/components/ui/HeaderBox'
+import { Pagination } from '@/components/ui/Pagination';
 import TransactionsTable from '@/components/ui/TransactionsTable';
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
@@ -12,8 +13,15 @@ const TransactionHistory = async ({searchParams:{id,page}}:SearchParamProps) => 
   if (!accounts) return;
   const accountsData = accounts?.data;
   const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
-
   const account = await getAccount({ appwriteItemId });
+    const rowsPerPage = 10;
+    const totalPages = Math.ceil(account?.transactions.length / rowsPerPage);
+    const indexOfLastTransaction = currentPage * rowsPerPage;
+    const indexOfFirstTransaction = indexOfLastTransaction - rowsPerPage;
+    const currentTransactions = account?.transactions.slice(
+      indexOfFirstTransaction,
+      indexOfLastTransaction
+    );
   return (
     <div className="transactions">
       <div className="transactions-header">
@@ -33,17 +41,20 @@ const TransactionHistory = async ({searchParams:{id,page}}:SearchParamProps) => 
               ●●●● ●●●● ●●●● {account?.data.mask}
             </p>
           </div>
-          <div className='transactions-account-balance'>
-            <p className='text-14'>
-              Current balance
-            </p>
-            <p className='text-24 text-center font-bold'>
+          <div className="transactions-account-balance">
+            <p className="text-14">Current balance</p>
+            <p className="text-24 text-center font-bold">
               {formatAmount(account?.data.currentBalance)}
             </p>
           </div>
         </div>
-        <section className='flex w-full flex-col gap-6'>
-          <TransactionsTable transactions={account?.transactions} />
+        <section className="flex w-full flex-col gap-6">
+          <TransactionsTable transactions={currentTransactions} />
+          {totalPages > 1 && (
+            <div className="my-4 w-full">
+              <Pagination totalPages={totalPages} page={currentPage} />
+            </div>
+          )}
         </section>
       </div>
     </div>
